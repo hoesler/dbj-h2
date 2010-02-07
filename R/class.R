@@ -4,10 +4,9 @@ setClass("H2Connection", contains = "JDBCConnection")
 setClass("H2Result", contains = "JDBCResult")
 
 H2 <- function(driverClass='org.h2.Driver', 
-	classPath= system.file("h2.jar", package = "H2"), 
 	identifier.quote="\"", parameters = "-Dh2.identifiersToUpper=false") {
   options(java.parameters=parameters)
-  .jinit(classPath)
+  .jpackage("RH2")
   if (nchar(driverClass) && is.jnull(.jfindClass(as.character(driverClass)[1])))
     stop("Cannot find H2 driver class ",driverClass)
   jdrv <- .jnew(driverClass, check=FALSE)

@@ -7,16 +7,12 @@
   \code{H2} creates a new DBI driver that can be used to start connections.
 }
 \usage{ H2(driverClass='org.h2.Driver', 
-	classPath= system.file("h2.jar", package = "H2"), 
 	identifier.quote="\"", parameters = "-Dh2.identifiersToUpper=false")
 }
 \arguments{
   \item{driverClass}{name of the Java class of the driver to
     load. If empty, it is assumed that corresponding drivers were
     loaded by other means.}
-  \item{classPath}{class path that needs to be appended in order to
-    load the desired driver. Usually it is the path to the JAR file
-    containing the driver.}
   \item{identifier.quote}{character to use for quoting identifiers in
     automatically generated SQL statements or \code{NA} for no
     quoted identifiers.}    
