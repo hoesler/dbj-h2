@@ -59,8 +59,20 @@ setMethod("dbWriteTable", "H2Connection", def=function(conn, name, value, overwr
   dbSendUpdate(conn, ct)
   if (length(value[[1]])) {
     inss <- paste("INSERT INTO ",qname," VALUES(", paste(rep("?",length(value)),collapse=','),")",sep='')
-    for (j in 1:length(value[[1]]))
-      dbSendUpdate(conn, inss, list=as.list(value[j,]))
+	# send Date variables as character strings
+	is.Date <- sapply(value, inherits, what = "Date")
+	for(i in which(is.Date)) {
+		value[[i]] <- as.character(value[[i]])
+	}
+	# send times variables as character strings
+	is.times <- sapply(value, function(x) identical(class(x), "times"))
+	for(i in which(is.times)) {
+		value[[i]] <- as.character(value[[i]])
+	}
+	if (NCOL(value) > 0) {
+		for (j in seq_along(value[[1]]))
+		  dbSendUpdate(conn, inss, list=as.list(value[j,]))
+	}
   }
   if (ac) dbCommit(conn)            
 })
@@ -68,9 +80,10 @@ setMethod("dbWriteTable", "H2Connection", def=function(conn, name, value, overwr
 setMethod("dbDataType", signature(dbObj="H2Connection", obj = "ANY"),
           def = function(dbObj, obj, ...) {
             if (is.integer(obj)) "INTEGER"
-            else if (is.numeric(obj)) "DOUBLE PRECISION"
             else if (inherits(obj, "Date")) "DATE"
+            else if (identical(class(obj), "times")) "TIME"
 			else if (inherits(obj, "POSIXct")) "TIMESTAMP"
+            else if (is.numeric(obj)) "DOUBLE PRECISION"
             else "VARCHAR(255)"
           }, valueClass = "character")
 
@@ -84,6 +97,8 @@ setMethod("fetch", signature(res="H2Result", n="numeric"), def=function(res, n, 
            numeric()
        } else if (ct == 91) { 
            structure(numeric(), class = "Date")
+       } else if (ct == 92) { 
+           structure(numeric(), class = "times")
        } else if (ct == 93) { 
            structure(numeric(), class = class(Sys.time()))
        } else character()
@@ -94,10 +109,14 @@ setMethod("fetch", signature(res="H2Result", n="numeric"), def=function(res, n, 
   while (.jcall(res@jr, "Z", "next")) {
     j <- j + 1
     for (i in 1:cols) {
-      l[[i]][j] <- if (is.numeric(l[[i]])) { 
-          l[[i]][j] <- .jcall(res@jr, "D", "getDouble", i)
-      } else if (inherits(l[[i]], "Date")) {
+      if (inherits(l[[i]], "Date")) {
         l[[i]][j] <- as.Date(.jcall(res@jr, "S", "getString", i))
+      } else if (inherits(l[[i]], "times")) {
+        l[[i]][j] <- times(.jcall(res@jr, "S", "getString", i))
+      } else if (inherits(l[[i]], "POSIXct")) {
+        l[[i]][j] <- as.POSIXct(.jcall(res@jr, "S", "getString", i))
+      } else if (is.numeric(l[[i]])) { 
+          l[[i]][j] <- .jcall(res@jr, "D", "getDouble", i)
       } else {
         a <- .jcall(res@jr, "S", "getString", i)
         l[[i]][j] <- if (is.null(a)) NA else a

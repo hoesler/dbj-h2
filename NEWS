@@ -1,3 +1,9 @@
+Version 0.1-2
+
+o Date, times (from chron) and POSIXct classes now supported as 
+  DATE, TIME, TIMESTAMP column types respectively
+
+o new dependence on chron package to support times
 
 Version 0.1-1
 
