@@ -27,6 +27,11 @@
   and creates a proxy R object which can be used to a
   call \code{\link[DBI]{dbConnect}} which actually creates a connection.
 
+It handles "integer", "Date", chron "times", "POSIXct" and "numeric" classes
+using the H2 types of "integer", "date", "time", "timestamp" and 
+"double precision".  All other R classes are converted to "character" and
+stored as varchar(255).
+
 }
 \seealso{
   \code{\link[DBI]{dbConnect}}
