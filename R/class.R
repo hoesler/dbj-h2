@@ -116,7 +116,8 @@ setMethod("fetch", signature(res="H2Result", n="numeric"), def=function(res, n, 
       } else if (inherits(l[[i]], "POSIXct")) {
         l[[i]][j] <- as.POSIXct(.jcall(res@jr, "S", "getString", i))
       } else if (is.numeric(l[[i]])) { 
-          l[[i]][j] <- .jcall(res@jr, "D", "getDouble", i)
+		  a <- .jcall(res@jr, "S", "getString", i)
+          l[[i]][j] <- if (is.null(a)) NA else .jcall(res@jr, "D", "getDouble", i)
       } else {
         a <- .jcall(res@jr, "S", "getString", i)
         l[[i]][j] <- if (is.null(a)) NA else a
