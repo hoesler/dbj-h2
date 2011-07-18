@@ -7,7 +7,7 @@
   \code{H2} creates a new DBI driver that can be used to start connections.
 }
 \usage{ H2(driverClass='org.h2.Driver', 
-	identifier.quote="\"", parameters = "-Dh2.identifiersToUpper=false")
+	identifier.quote="\"", jars = getOption("RH2.jars"), \dots)
 }
 \arguments{
   \item{driverClass}{name of the Java class of the driver to
@@ -16,7 +16,9 @@
   \item{identifier.quote}{character to use for quoting identifiers in
     automatically generated SQL statements or \code{NA} for no
     quoted identifiers.}    
-  \item{parameters}{Java virtual machine parameters.}
+  \item{jars}{pathname to H2 jar file.  If omitted it will use the version of
+    H2 included in RH2.}
+  \item{\dots}{further arguments passed to \code{.jpackage}}
 }
 \value{
   Returns a \code{H2Driver} object that can be used in calls to
@@ -38,7 +40,6 @@ stored as varchar(255).
 }
 \examples{
 \dontrun{
-# problem creating tables with lower case in the column names
 library(RJDBC)
 
 con <- dbConnect(H2(), "jdbc:h2:~/test", "sa", "")
@@ -55,6 +56,13 @@ dbWriteTable(con, "BOD", BOD)
 dbGetQuery(con, "select * from BOD")
 
 dbDisconnect(con)
+
+# connect to a different version of H2 and show version
+con <- dbConnect(H2(jars = "c:/tmp2/h2-1.3.155.jar"))
+s <- "select VALUE from INFORMATION_SCHEMA.SETTINGS where NAME = 'info.VERSION'"
+dbGetQuery(con, s)
+dbDisconnect(con)
+
 }
 }
 \keyword{interface}

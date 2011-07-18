@@ -3,10 +3,14 @@ setClass("H2Driver", contains = "JDBCDriver")
 setClass("H2Connection", contains = "JDBCConnection")
 setClass("H2Result", contains = "JDBCResult")
 
+# H2("RH2", jar = NULL, morePaths = "C:/tmp2/h2-1.3.155.jar") can be used
+# to specify a different jar file.
 H2 <- function(driverClass='org.h2.Driver', 
-	identifier.quote="\"", parameters = "-Dh2.identifiersToUpper=false") {
-  options(java.parameters=parameters)
-  .jpackage("RH2")
+  identifier.quote="\"", jars = getOption("RH2.jars"), ...) {
+  #identifier.quote="\"", parameters = "-Dh2.identifiersToUpper=false", ...) {
+  # options(java.parameters=parameters)
+  if (is.null(jars)) jars <- "*"
+  .jpackage("RH2", jars = jars, ...)
   if (nchar(driverClass) && is.jnull(.jfindClass(as.character(driverClass)[1])))
     stop("Cannot find H2 driver class ",driverClass)
   jdrv <- .jnew(driverClass, check=FALSE)
@@ -16,7 +20,11 @@ H2 <- function(driverClass='org.h2.Driver',
 }
 
 setMethod("dbConnect", "H2Driver", def=function(drv, url = "jdbc:h2:mem:", 
-  user='sa', password='', ...) {
+  user='sa', password='', DATABASE_TO_UPPER = getOption("RH2.DATABASE_TO_UPPER"), ...) {
+  if (is.null(DATABASE_TO_UPPER) ||
+		(is.logical(DATABASE_TO_UPPER) && !DATABASE_TO_UPPER) ||
+		(is.character(DATABASE_TO_UPPER) && DATABASE_TO_UPPER == "FALSE"))
+			url <- paste(url, "DATABASE_TO_UPPER=FALSE", sep = ";")
   jc <- .jcall("java/sql/DriverManager","Ljava/sql/Connection;","getConnection", as.character(url)[1], as.character(user)[1], as.character(password)[1], check=FALSE)
   if (is.jnull(jc) || !is.jnull(drv@jdrv)) {
     # ok one reason for this to fail is its interaction with rJava's
