@@ -118,17 +118,21 @@ setMethod("fetch", signature(res="H2Result", n="numeric"), def=function(res, n, 
     j <- j + 1
     for (i in 1:cols) {
       if (inherits(l[[i]], "Date")) {
-        l[[i]][j] <- as.Date(.jcall(res@jr, "S", "getString", i))
+		# browser() ##
+        val <- .jcall(res@jr, "S", "getString", i)
+        l[[i]][j] <- if (is.null(val)) NA else as.Date(val)
       } else if (inherits(l[[i]], "times")) {
-        l[[i]][j] <- times(.jcall(res@jr, "S", "getString", i))
+        val <- .jcall(res@jr, "S", "getString", i)
+        l[[i]][j] <- if (is.null(val)) NA else times(val)
       } else if (inherits(l[[i]], "POSIXct")) {
-        l[[i]][j] <- as.POSIXct(.jcall(res@jr, "S", "getString", i))
+        val <- .jcall(res@jr, "S", "getString", i)
+        l[[i]][j] <- if (is.null(val)) NA else as.POSIXct(val)
       } else if (is.numeric(l[[i]])) { 
-		  a <- .jcall(res@jr, "S", "getString", i)
-          l[[i]][j] <- if (is.null(a)) NA else .jcall(res@jr, "D", "getDouble", i)
+		  val <- .jcall(res@jr, "D", "getDouble", i)
+          l[[i]][j] <- if (is.null(val)) NA else val
       } else {
-        a <- .jcall(res@jr, "S", "getString", i)
-        l[[i]][j] <- if (is.null(a)) NA else a
+        val <- .jcall(res@jr, "S", "getString", i)
+        l[[i]][j] <- if (is.null(val)) NA else val
       }
     }
     if (n > 0 && j >= n) break
