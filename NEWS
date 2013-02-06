@@ -1,3 +1,7 @@
+Version 0.1.2.10
+
+o RJDBC 0.2-1 introduced an incompatibility which is now fixed
+
 Version 0.1.2.9
 
 o NAMESPACE file added

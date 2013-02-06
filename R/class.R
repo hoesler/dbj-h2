@@ -155,3 +155,8 @@ setMethod("dbSendQuery", signature(conn="H2Connection", statement="character"), 
   new("H2Result", jr=r, md=md)
 })
 
+setMethod("dbGetQuery", signature(conn="JDBCConnection", statement="character"),  def=function(conn, statement, ...) {
+  r <- dbSendQuery(conn, statement, ...)
+  fetch(r, -1)
+})
+
