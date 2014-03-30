@@ -40,6 +40,8 @@ setMethod("dbConnect", "H2Driver", def=function(drv, url = "jdbc:h2:mem:",
           valueClass="H2Connection")
 
 setMethod("dbWriteTable", "H2Connection", def=function(conn, name, value, overwrite=TRUE, ...) {
+  dots <- list(...)
+  temporary <- "temporary" %in% names(dots) && dots$temporary
   ac <- .jcall(conn@jc, "Z", "getAutoCommit")
   if (is.vector(value) && !is.list(value)) value <- data.frame(x=value)
   if (length(value)<1) stop("value must have at least one column")
@@ -58,7 +60,8 @@ setMethod("dbWriteTable", "H2Connection", def=function(conn, name, value, overwr
   # qname <- .sql.qescape(name, TRUE, conn@identifier.quote)
   # cat("conn@identifier.quote:", conn@identifier.quote, "\n")
   qname <- .sql.qescape(name, FALSE, conn@identifier.quote)
-  ct <- paste("CREATE TABLE ",qname," (",fdef,")",sep= '')
+  ct <- paste(if (temporary) "CREATE TEMPORARY TABLE" else "CREATE TABLE ",
+	      qname," (",fdef,")",sep= '')
   # cat("ct:", ct, "\n")
   if (ac) {
     .jcall(conn@jc, "V", "setAutoCommit", FALSE)
@@ -102,37 +105,42 @@ setMethod("fetch", signature(res="H2Result", n="numeric"), def=function(res, n, 
   for (i in 1:cols) {
     ct <- .jcall(res@md, "I", "getColumnType", i)
     l[[i]] <- if (ct == -5 | ct ==-6 | (ct >= 2 & ct <= 8)) { 
-           numeric()
-       } else if (ct == 91) { 
-           structure(numeric(), class = "Date")
-       } else if (ct == 92) { 
-           structure(numeric(), class = "times")
-       } else if (ct == 93) { 
-           structure(numeric(), class = class(Sys.time()))
-       } else character()
+      numeric()
+    } else if (ct == 91) { 
+      structure(numeric(), class = "Date")
+    } else if (ct == 92) { 
+      structure(numeric(), class = "times")
+    } else if (ct == 93) { 
+      structure(numeric(), class = class(Sys.time()))
+    } else character()
     names(l)[i] <- .jcall(res@md, "S", "getColumnName", i)
   }
-
+  
   j <- 0
   while (.jcall(res@jr, "Z", "next")) {
     j <- j + 1
     for (i in 1:cols) {
       if (inherits(l[[i]], "Date")) {
-		# browser() ##
+        # browser() ##
         val <- .jcall(res@jr, "S", "getString", i)
-        l[[i]][j] <- if (is.null(val)) NA else as.Date(val)
+        wn <- .jcall(res@jr, "Z", "wasNull")
+        l[[i]][j] <- if (wn | is.null(val)) NA else as.Date(val)
       } else if (inherits(l[[i]], "times")) {
         val <- .jcall(res@jr, "S", "getString", i)
-        l[[i]][j] <- if (is.null(val)) NA else times(val)
+        wn <- .jcall(res@jr, "Z", "wasNull")
+        l[[i]][j] <- if (wn | is.null(val)) NA else times(val)
       } else if (inherits(l[[i]], "POSIXct")) {
         val <- .jcall(res@jr, "S", "getString", i)
-        l[[i]][j] <- if (is.null(val)) NA else as.POSIXct(val)
+        wn <- .jcall(res@jr, "Z", "wasNull")
+        l[[i]][j] <- if (wn | is.null(val)) NA else as.POSIXct(val)
       } else if (is.numeric(l[[i]])) { 
-		  val <- .jcall(res@jr, "D", "getDouble", i)
-          l[[i]][j] <- if (is.null(val)) NA else val
+        val <- .jcall(res@jr, "D", "getDouble", i)
+        wn <- .jcall(res@jr, "Z", "wasNull")
+        l[[i]][j] <- if (wn | is.null(val)) NA else val
       } else {
         val <- .jcall(res@jr, "S", "getString", i)
-        l[[i]][j] <- if (is.null(val)) NA else val
+        wn <- .jcall(res@jr, "Z", "wasNull")
+        l[[i]][j] <- if (wn | is.null(val)) NA else val
       }
     }
     if (n > 0 && j >= n) break
@@ -155,8 +163,12 @@ setMethod("dbSendQuery", signature(conn="H2Connection", statement="character"), 
   new("H2Result", jr=r, md=md)
 })
 
-setMethod("dbGetQuery", signature(conn="JDBCConnection", statement="character"),  def=function(conn, statement, ...) {
+setMethod("dbGetQuery", signature(conn="H2Connection", statement="character"),  def=function(conn, statement, ...) {
   r <- dbSendQuery(conn, statement, ...)
   fetch(r, -1)
 })
+
+.verify.JDBC.result <- RJDBC:::.verify.JDBC.result
+.fillStatementParameters <- RJDBC:::.fillStatementParameters
+.sql.qescape <- RJDBC:::.sql.qescape
 

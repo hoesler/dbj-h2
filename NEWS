@@ -1,6 +1,14 @@
+Version 0.1.2.12
+
+o bug fix for handling NULL values (David Kaplan)
+
+Version 0.1.2.11
+
+o dbWriteTable has temporary argument to create a temporary table
+
 Version 0.1.2.10
 
-o RJDBC 0.2-1 introduced an incompatibility which is now fixed
+o fixed incompatibility with RJDBC that was introduced in RJDBC 0.2-1
 
 Version 0.1.2.9
 
