@@ -1,3 +1,7 @@
+#' @import chron
+#' @import methods
+#' @import RJDBC
+NULL
 
 setClass("H2Driver", contains = "JDBCDriver")
 setClass("H2Connection", contains = "JDBCConnection")
