@@ -43,6 +43,12 @@ setMethod("dbConnect", "H2Driver", def=function(drv, url = "jdbc:h2:mem:",
   new("H2Connection", jc=jc, identifier.quote=drv@identifier.quote)},
           valueClass="H2Connection")
 
+setMethod("dbDisconnect", signature(conn="H2Connection"), def=function(conn, ...) {
+  .jcheck()
+  .jcall(conn@jc, "V", "close", check=FALSE)
+  !.jcheck()
+})
+
 setMethod("dbWriteTable", "H2Connection", def=function(conn, name, value, overwrite=TRUE, ...) {
   dots <- list(...)
   temporary <- "temporary" %in% names(dots) && dots$temporary
@@ -105,19 +111,23 @@ setMethod("dbDataType", signature(dbObj="H2Connection", obj = "ANY"),
 setMethod("fetch", signature(res="H2Result", n="numeric"), def=function(res, n, ...) {
   cols <- .jcall(res@md, "I", "getColumnCount")
   if (cols < 1) return(NULL)
+
+  rowsExpected <- if (n>-1) n else 1e4
   l <- list()
   for (i in 1:cols) {
     ct <- .jcall(res@md, "I", "getColumnType", i)
     l[[i]] <- if (ct == -5 | ct ==-6 | (ct >= 2 & ct <= 8)) { 
-      numeric()
-    } else if (ct == 91) { 
-      structure(numeric(), class = "Date")
-    } else if (ct == 92) { 
-      structure(numeric(), class = "times")
-    } else if (ct == 93) { 
-      structure(numeric(), class = class(Sys.time()))
-    } else character()
-    names(l)[i] <- .jcall(res@md, "S", "getColumnName", i)
+           numeric(rowsExpected)
+       } else if (ct == 91) { 
+           structure(numeric(rowsExpected), class = "Date")
+       } else if (ct == 92) { 
+           structure(numeric(rowsExpected), class = "times")
+       } else if (ct == 93) { 
+           structure(numeric(rowsExpected), class = class(Sys.time()))
+       } else {
+           character(rowsExpected)
+       }
+    names(l)[i] <- .jcall(res@md, "S", "getColumnLabel", i)
   }
   
   j <- 0
@@ -149,6 +159,13 @@ setMethod("fetch", signature(res="H2Result", n="numeric"), def=function(res, n, 
     }
     if (n > 0 && j >= n) break
   }
+
+  if (rowsExpected > j) {
+    for (i in 1:cols) {
+      l[[i]] <- l[[i]][1:j]
+    }
+  }
+  
   if (j)
     as.data.frame(l, row.names=1:j)
   else
@@ -170,6 +187,38 @@ setMethod("dbSendQuery", signature(conn="H2Connection", statement="character"), 
 setMethod("dbGetQuery", signature(conn="H2Connection", statement="character"),  def=function(conn, statement, ...) {
   r <- dbSendQuery(conn, statement, ...)
   fetch(r, -1)
+})
+
+setMethod("dbHasCompleted", signature(res="H2Result"), def=function(res, ...) {
+  .jcheck()
+  isBeforeFirst <- .jcall(res@jr, "Z", "isBeforeFirst")
+  isAfterLast <- .jcall(res@jr, "Z", "isAfterLast")
+  if(.jcheck()) stop("Java Exception")
+  !isBeforeFirst && isAfterLast
+})
+
+setMethod("dbClearResult", signature(res="H2Result"), def=function(res, ...) {
+  .jcheck()
+  .jcall(res@jr, "V", "close", check=FALSE)
+  !.jcheck()
+})
+
+setMethod("dbGetInfo", signature(dbObj="H2Connection"), def=function(dbObj, ...) {
+  .jcheck()
+  meta_data <- .jcall(dbObj@jc, "Ljava/sql/DatabaseMetaData;", "getMetaData")
+  info <- list()
+  if(!is.null(meta_data)) {
+    info <- c(info,
+      url = .jcall(meta_data, "S", "getURL"),
+      user_name = .jcall(meta_data, "S", "getUserName"),
+      database_product_version = .jcall(meta_data, "S", "getDatabaseProductVersion"),
+      driver_name = .jcall(meta_data, "S", "getDriverName"),
+      driver_version = .jcall(meta_data, "S", "getDriverVersion"))
+  } else {
+    warning("Java call to getMetaData() returned null")
+  }
+  !.jcheck()
+  return(info)
 })
 
 .verify.JDBC.result <- RJDBC:::.verify.JDBC.result
