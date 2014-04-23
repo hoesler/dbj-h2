@@ -8,8 +8,9 @@ download_h2_jar:
 	curl -O http://search.maven.org/remotecontent?filepath=com/h2database/h2/$(H2_VERSION)/h2-$(H2_VERSION).jar
 
 copy_to_inst:
+	mkdir -p ../inst/java/
 	cp *.jar ../inst/java/
 
 clean:
-	rm *.jar
-	rm ../inst/java/*.jar
+	rm -f *.jar
+	rm -rf ../inst/java/
