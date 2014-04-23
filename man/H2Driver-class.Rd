@@ -1,36 +1,49 @@
-\name{H2Driver-class}
 \docType{class}
+\name{H2Driver-class}
+\alias{H2}
 \alias{H2Driver-class}
+\alias{dbConnect,H2Driver-method}
+\title{Class H2Driver}
+\usage{
+H2(driverClass = "org.h2.Driver",
+  identifier.quote = "\\"", jars = getOption("RH2.jars"), ...)
 
-\title{Class "H2Driver"}
-\description{A DBI driver to access the H2 databases.}
-\section{Generators}{
-Objects can be created by calls to \code{\link{H2}} or \code{\link[DBI]{dbDriver}}.
+\S4method{dbConnect}{H2Driver}(drv, url = "jdbc:h2:mem:", user = "sa",
+  password = "", database_to_upper = getOption("RH2.DATABASE_TO_UPPER"),
+  ...)
 }
-\section{Slots}{
-  \describe{
-    \item{\code{identifier.quote}:}{Quote character to use for
-      identifiers in automatically generated SQL statements or \code{NA}
-      if quoted identifiers are not desired.}
-    \item{\code{jdrv}:}{Java object reference to an instance of the
-      driver if the driver can be instantiated by a default
-      constructor. This object is only used as a fall-back when the
-      driver manager fails to find a driver.}
-  }
-}
-\section{Extends}{
-Class \code{"\link[RJDBC]{JDBCDriver-class}"}, directly.
-}
-\section{Methods}{
-No methods defined with class "H2Driver" in the signature.
-}
-%\references{ ~put references to the literature/web site here ~ }
-%\author{ ~~who you are~~ }
-%\note{ ~~further notes~~ }
+\arguments{
+  \item{driverClass}{the java driver class to use}
 
-\seealso{
-  \code{\link[RJDBC]{JDBCDriver-class}}
+  \item{identifier.quote}{the character to surround
+  itendifiers with}
+
+  \item{jars}{Java archives in the java directory of the
+  package that should be added to the class path.  The
+  default value is \code{getOption("RH2.jars")}.
+  \code{NULL} will be replace with \code{"*"}.  See
+  \code{\link[rJava]{.jpackage}} for more details.}
+
+  \item{...}{other arguments to pass to
+  \link[rJava]{.jpackage}}
+
+  \item{url}{the url to connect to}
+
+  \item{user}{the user to log in}
+
+  \item{password}{the users password}
+
+  \item{database_to_upper}{the value for DATABASE_TO_UPPER
+  appended to the url}
+
+  \item{drv}{ an object that inherits from
+  \code{DBIDriver}, a character string specifying the DBMS
+  driver, e.g., "RPgSQL", "ROracle", "Informix", or
+  possibly another \code{dbConnect} object.  }
 }
-%\examples{
-%}
-\keyword{classes}
+\description{
+Class H2Driver
+
+Create a H2 Database Driver object.
+}
+

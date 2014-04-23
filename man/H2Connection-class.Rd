@@ -1,35 +1,61 @@
-\name{H2Connection-class}
 \docType{class}
+\name{H2Connection-class}
 \alias{H2Connection-class}
+\alias{dbDataType,H2Connection-method}
+\alias{dbDisconnect,H2Connection-method}
+\alias{dbGetInfo,H2Connection-method}
+\alias{dbGetQuery,H2Connection,character-method}
+\alias{dbGetQuery,H2Connection-method}
+\alias{dbSendQuery,H2Connection,character-method}
+\alias{dbSendQuery,H2Connection-method}
+\alias{dbWriteTable,H2Connection-method}
+\title{Class H2Connection}
+\usage{
+\S4method{dbDisconnect}{H2Connection}(conn, ...)
 
-\title{Class "H2Connection"}
-\description{Class representing a (DBI) database connection which uses
-  H2 to connect to a database.}
-\section{Generators}{
-  Objects can be created by call to \code{\link[DBI]{dbConnect}} of a
-  \code{\link{JDBC}} driver.
+\S4method{dbWriteTable}{H2Connection}(conn, name, value, overwrite = TRUE,
+  ...)
+
+\S4method{dbDataType}{H2Connection}(dbObj, obj, ...)
+
+\S4method{dbSendQuery}{H2Connection,character}(conn, statement, ...,
+  list = NULL)
+
+\S4method{dbGetQuery}{H2Connection,character}(conn, statement, ...)
+
+\S4method{dbGetInfo}{H2Connection}(dbObj, ...)
 }
-\section{Slots}{
-	 \describe{
-	   \item{\code{jc}:}{Java object representing the connection.}
-	   \item{\code{identifier.quote}:}{Quote character to use for
-	     quoting identifiers in automatically generated SQL
-	     statements or \code{NA} for no such quoting.
-	     Usually the value is inherited from the
-	     \code{"\linkS4class{H2Driver}"}.}
-	 }
-       }
-       
-\section{Extends}{
-  Class \code{"\link[RJDBC]{JDBCConnection-class}"}, directly.
+\arguments{
+  \item{overwrite}{set to \code{TRUE} if the table should
+  be removed if it exists}
+
+  \item{list}{a list of statement parameters}
+
+  \item{conn}{ a connection object as produced by
+  \code{dbConnect}.  }
+
+  \item{...}{ authorization arguments needed by the DBMS
+  instance; these typically include \code{user},
+  \code{password}, \code{dbname}, \code{host}, \code{port},
+  etc.  For details see the appropriate \code{DBIDriver}.
+  }
+
+  \item{name}{ a character string specifying a DBMS table
+  name.  }
+
+  \item{value}{ a data.frame (or coercible to data.frame).
+  }
+
+  \item{dbObj}{ a \code{DBIDriver} object, e.g.,
+  \code{ODBCDriver}, \code{OracleDriver}. }
+
+  \item{obj}{ R/Splus object whose SQL type we want to
+  determine. }
+
+  \item{statement}{ a character vector of length 1 with the
+  SQL statement. }
 }
-\section{Methods}{
-  No methods defined with class "H2Connection" in the signature.
+\description{
+Class H2Connection
 }
-%\author{ ~~who you are~~ }
-\seealso{
-  \code{\link{JDBC}}, \code{"\linkS4class{JDBCDriver}"}
-}
-%\examples{
-%}
-\keyword{classes}
+

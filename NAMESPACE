@@ -1,3 +1,7 @@
+export(H2)
+exportClasses(H2Connection)
+exportClasses(H2Driver)
+exportClasses(H2Result)
 import(RJDBC)
 import(chron)
 import(methods)
