@@ -17,8 +17,8 @@ NeedsCompilation: no
 Repository: CRAN
 Date/Publication: 2014-03-31 16:26:18
 Collate:
+    'H2.R'
     'H2Object.R'
     'H2Connection.R'
     'H2Driver.R'
     'H2Result.R'
-    'H2Utilities.R'

@@ -3,23 +3,28 @@ NULL
 
 #' Class H2Connection
 #'
-#' @name H2Connection-class
-#' @rdname H2Connection-class
-#' @exportClass H2Connection
+#' @export
 setClass("H2Connection", contains = c("JDBCConnection", "H2Object"))
 
-#' @rdname H2Connection-class
-#' @aliases dbSendQuery,H2Connection-method
-#' @param list a list of statement parameters
+#' Execute a SQL statement on a database connection.
+#'
+#' @param conn An existing \code{\linkS4class{H2Connection}}
+#' @param statement the statement to send over the connection
+#' @param parameters a list of statment parameters
+#' @param ... Ignored. Needed for compatiblity with generic.
+#' @export
 setMethod("dbSendQuery", signature(conn = "H2Connection", statement = "character"),
-  function(conn, statement, ..., list = NULL) {
-    new("H2Result", callNextMethod(conn = conn, statement = statement, ..., list = list))
+  function(conn, statement, list = list(), ...) {
+    new("H2Result", callNextMethod(conn = conn, statement = statement, list = list, ...))
   },
   valueClass = "H2Result"
 )
 
-#' @rdname H2Connection-class
-#' @aliases dbGetInfo,H2Connection-method
+#' Get metadata about a H2Connection object.
+#'
+#' @param dbObj An object of class \code{\linkS4class{H2Connection}}
+#' @param ... Ignored. Included for compatibility with generic.
+#' @export
 setMethod("dbGetInfo", signature(dbObj = "H2Connection"),
   function(dbObj, ...) {
     .jcheck()

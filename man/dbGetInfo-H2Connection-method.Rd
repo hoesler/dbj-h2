@@ -1,0 +1,18 @@
+\docType{methods}
+\name{dbGetInfo,H2Connection-method}
+\alias{dbGetInfo,H2Connection-method}
+\title{Get metadata about a H2Connection object.}
+\usage{
+\S4method{dbGetInfo}{H2Connection}(dbObj, ...)
+}
+\arguments{
+  \item{dbObj}{An object of class
+  \code{\linkS4class{H2Connection}}}
+
+  \item{...}{Ignored. Included for compatibility with
+  generic.}
+}
+\description{
+Get metadata about a H2Connection object.
+}
+
