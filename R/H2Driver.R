@@ -13,7 +13,6 @@ setClass("H2Driver", contains = c("JDBCDriver", "H2Object"))
 #' @rdname H2Driver-class
 #' @export
 H2 <- function(...) {
-  .jpackage("RH2")
   jdbc_driver <- JDBC('org.h2.Driver', ...)
   new("H2Driver", jdbc_driver)
 }

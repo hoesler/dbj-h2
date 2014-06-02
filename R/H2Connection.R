@@ -14,8 +14,9 @@ setClass("H2Connection", contains = c("JDBCConnection", "H2Object"))
 #' @param ... Ignored. Needed for compatiblity with generic.
 #' @export
 setMethod("dbSendQuery", signature(conn = "H2Connection", statement = "character"),
-  function(conn, statement, list = list(), ...) {
-    new("H2Result", callNextMethod(conn = conn, statement = statement, list = list, ...))
+  function(conn, statement, parameters = list(), ...) {
+    jdbc_result <- callNextMethod(conn = conn, statement = statement, parameters = parameters, ...)
+    H2Result(jdbc_result)
   },
   valueClass = "H2Result"
 )
@@ -28,7 +29,7 @@ setMethod("dbSendQuery", signature(conn = "H2Connection", statement = "character
 setMethod("dbGetInfo", signature(dbObj = "H2Connection"),
   function(dbObj, ...) {
     .jcheck()
-    meta_data <- .jcall(dbObj@jc, "Ljava/sql/DatabaseMetaData;", "getMetaData")
+    meta_data <- .jcall(dbObj@j_connection, "Ljava/sql/DatabaseMetaData;", "getMetaData")
     info <- list()
     if(!is.null(meta_data)) {
       info <- c(info,
