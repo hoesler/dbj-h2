@@ -28,7 +28,7 @@ setMethod("dbConnect", signature(drv = "H2Driver"),
 	function(drv, url = "jdbc:h2:mem:", user = 'sa', password = '', ...) {
 
     if (!any(grepl("^jdbc:", url))) {
-      url <- paste("jdbc:h2:", sub("^(.*)\\.h2\\.db$", "\\1", .self$path), sep="")
+      url <- paste("jdbc:h2:", sub("^(.*)\\.h2\\.db$", "\\1", url), sep="")
     }
 
     if (!any(grepl("^jdbc:h2:", url))) {
