@@ -1,20 +1,18 @@
 #' @include H2Object.R
 NULL
 
-#' Class H2QueryResult.
-#'
-#' @export
-setClass("H2QueryResult", contains = c("JDBCQueryResult", "H2Object"))
-
-#' Class H2UpdateResult.
-#'
-#' @export
-setClass("H2UpdateResult", contains = c("JDBCUpdateResult", "H2Object"))
-
 #' Class H2Result.
 #'
 #' @export
-setClassUnion("H2Result", c("H2QueryResult", "H2UpdateResult"))
+setClass("H2Result", contains = c("JDBCResult", "H2Object", "VIRTUAL"))
+
+#' @rdname H2Result-class
+#' @export
+setClass("H2QueryResult", contains = c("JDBCQueryResult", "H2Result"))
+
+#' @rdname H2Result-class
+#' @export
+setClass("H2UpdateResult", contains = c("JDBCUpdateResult", "H2Result"))
 
 H2Result <- function(jdbc_result) {
   if (is(jdbc_result, "JDBCQueryResult")) {
