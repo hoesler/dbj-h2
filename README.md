@@ -6,6 +6,6 @@ DBI interface to H2 Database based on [hoesler/RJDBC](https://github.com/hoesler
 
 ## Installation
 ```R
-devtools.install_github("hoesler/RJDBC")
-devtools.install_github("hoesler/RH2")
+devtools::install_github("hoesler/RJDBC")
+devtools::install_github("hoesler/RH2")
 ```
