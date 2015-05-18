@@ -1,2 +1,3 @@
 *.sublime-*
 .Rapp.history
+src/*.jar

@@ -6,17 +6,15 @@ JAVA_INST_PATH=$(PACKAGE_ROOT)/inst/java
 
 .PHONY: all clean
 
-all: download_h2_jar copy_to_inst
+all: h2_jar
 
-download_h2_jar:
-ifeq ($(wildcard $(DATABASE_LIB)),)
-	curl -O -L http://search.maven.org/remotecontent?filepath=com/h2database/h2/$(H2_VERSION)/$(DATABASE_LIB)
+h2_jar:
+ifeq ($(wildcard $(JAVA_INST_PATH)/$(DATABASE_LIB)),)
+	curl -O -L "http://search.maven.org/remotecontent?filepath=com/h2database/h2/$(H2_VERSION)/$(DATABASE_LIB)"
+	mkdir -p "$(JAVA_INST_PATH)"
+	rm -f "$(JAVA_INST_PATH)/*.jar"
+	cp "$(DATABASE_LIB)" "$(JAVA_INST_PATH)/"
 endif
-
-copy_to_inst:
-	mkdir -p $(JAVA_INST_PATH)
-	rm -f $(JAVA_INST_PATH)/*.jar
-	cp $(DATABASE_LIB) $(JAVA_INST_PATH)/
 
 clean:
 	rm -f *.jar
