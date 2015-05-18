@@ -1,2 +1,6 @@
-^.*\.sublime-.*$
+Readme.md
+^.*\.Rproj$
+^\.Rproj\.user$
+^.*.sublime-*
 src/.*
+.travis.yml

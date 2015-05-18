@@ -1,4 +1,4 @@
-context("JDBCConnection")
+context("H2Connection")
 
 test_that("dbSendQuery", {
   # given

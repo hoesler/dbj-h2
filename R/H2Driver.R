@@ -3,12 +3,10 @@ NULL
 
 #' Class H2Driver and factory method H2.
 #'
-#' @name H2Driver-class
-#' @docType class
 #' @export
 setClass("H2Driver", contains = c("JDBCDriver", "H2Object"))
 
-#' @param ... arguments to \link[RJDBC]{JDBC} 
+#' @param ... arguments to \code{\link[RJDBC]{JDBC}}
 #' @name H2
 #' @rdname H2Driver-class
 #' @export
@@ -19,23 +17,17 @@ H2 <- function(...) {
 
 #' Connect to a h2 database.
 #' 
-#' @param url the jdbc url to connect to. If the url does not start with "jdbc:"
-#'   it is treated as a file path and automatically converted to an url.
+#' @param drv the database driver (\code{\link{H2}})
+#' @param url the url to connect to (Visit \url{http://h2database.com/html/features.html#database_url} for a reference).
+#'   If the url is a path to a local file the '.h2.db' suffix is stripped off automatically if present.
 #' @param user the user to log in
 #' @param password the users password
+#' @param ... further arguments passed to \code{\linkS4class{JDBCConnection}}.
 #' @export
 setMethod("dbConnect", signature(drv = "H2Driver"),
-	function(drv, url = "jdbc:h2:mem:", user = 'sa', password = '', ...) {
-
-    if (!any(grepl("^jdbc:", url))) {
-      url <- paste("jdbc:h2:", sub("^(.*)\\.h2\\.db$", "\\1", url), sep="")
-    }
-
-    if (!any(grepl("^jdbc:h2:", url))) {
-      stop("URL must start with jdbc:h2:")
-    }
-
-    new("H2Connection", callNextMethod(drv=drv, url=url, user = user, password = password, ...))
+	function(drv, url = "mem:", user = 'sa', password = '', ...) {
+    url <- sprintf("jdbc:h2:%s", sub("^(.*)\\.h2\\.db$", "\\1", url))
+    new("H2Connection", callNextMethod(drv = drv, url = url, user = user, password = password, ...))
   },
   valueClass = "H2Connection"
 )
