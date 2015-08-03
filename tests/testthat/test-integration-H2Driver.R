@@ -17,7 +17,7 @@ test_that("dbGetInfo returns expected values", {
 
   # then
   expect_that(info$driver.version, equals("0.9.99"))
-  expect_that(info$client.version, equals("1.4"))
+  expect_that(info$client.version, equals("1.3"))
 })
 
 test_that("dbConnect() accepts a H2Driver object", {
