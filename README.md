@@ -16,3 +16,6 @@ devtools::install_github("hoesler/dbj.h2")
 ```R
 con <- dbConnect(dbj.h2::driver(), url = "mem:", user = 'sa', password = '')
 ```
+
+## Thanks
+The development of dbj.h2 is hugely inspired by the [RH2](https://github.com/dmkaplan2000/RH2) package.
