@@ -3,12 +3,20 @@ NULL
 
 #' Class H2Driver and factory method H2.
 #'
+#' @keyword internal
 #' @export
 setClass("H2Driver", contains = c("JDBCDriver", "H2Object"))
 
-#' @param ... arguments to \code{\link[RJDBC]{JDBC}}
-#' @name H2
+#' @param ... arguments to \code{\link[dbj]{driver}}
 #' @rdname H2Driver-class
+#' @export
+driver <- function(...) {
+  jdbc_driver <- JDBC('org.h2.Driver', ...)
+  new("H2Driver", jdbc_driver)
+}
+
+#' Deprecated. Use dbj.h2::driver()
+#' @param ... arguments to \code{\link[dbj]{driver}}
 #' @export
 H2 <- function(...) {
   jdbc_driver <- JDBC('org.h2.Driver', ...)

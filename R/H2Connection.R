@@ -3,6 +3,7 @@ NULL
 
 #' Class H2Connection
 #'
+#' @keyword internal
 #' @export
 setClass("H2Connection", contains = c("JDBCConnection", "H2Object"))
 

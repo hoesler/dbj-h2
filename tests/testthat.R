@@ -1,4 +1,4 @@
 library(testthat)
-library(RH2)
+library(dbj.h2)
 
-test_check("RH2")
+test_check("dbj.h2")

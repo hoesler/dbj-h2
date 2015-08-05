@@ -16,7 +16,7 @@ test_that("dbGetInfo returns expected values", {
   info <- dbGetInfo(drv)
 
   # then
-  expect_that(info$driver.version, equals("0.9.99"))
+  expect_that(info$driver.version, equals("0.1"))
   expect_that(info$client.version, equals("1.3"))
 })
 

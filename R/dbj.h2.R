@@ -1,8 +1,8 @@
-#' A DBI implementation for H2 which extends RJDBC.
+#' A DBI implementation for H2 which extends dbj.
 #'
 #' @docType package
-#' @import RJDBC methods rJava DBI
-#' @name RH2
+#' @import dbj methods rJava DBI
+#' @name dbj.h2
 NULL
 
 .onLoad <- function(libname, pkgname) {

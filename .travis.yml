@@ -11,4 +11,4 @@ r_binary_packages:
   - assertthat
 
 r_github_packages:
-  - hoesler/RJDBC
+  - hoesler/dbj
