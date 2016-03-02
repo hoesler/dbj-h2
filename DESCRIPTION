@@ -23,3 +23,4 @@ Collate:
     'dbj.h2.R'
 Suggests:
     testthat
+RoxygenNote: 5.0.1
