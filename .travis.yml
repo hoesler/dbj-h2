@@ -1,14 +1,5 @@
 language: r
-
-sudo: required
-
-warnings_are_errors: true
-
-r_binary_packages:
-  - DBI
-  - testthat
-  - rJava
-  - assertthat
+cache: packages
 
 r_github_packages:
   - hoesler/dbj
