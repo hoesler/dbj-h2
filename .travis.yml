@@ -1,5 +1,7 @@
 language: r
 cache: packages
 
+sudo: required # for r_github_packages
+
 r_github_packages:
   - hoesler/dbj@development
