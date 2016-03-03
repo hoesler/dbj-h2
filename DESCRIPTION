@@ -9,7 +9,7 @@ Depends:
     methods,
     DBI (>= 0.3.1)
 Imports:
-    dbj (>= 0.1),
+    dbj (>= 0.2),
     rJava (>= 0.4-15)
 SystemRequirements: java runtime
 License: MIT + file LICENSE
@@ -23,3 +23,4 @@ Collate:
     'dbj.h2.R'
 Suggests:
     testthat
+RoxygenNote: 5.0.1

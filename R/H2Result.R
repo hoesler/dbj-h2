@@ -3,7 +3,7 @@ NULL
 
 #' Class H2Result.
 #'
-#' @keyword internal
+#' @keywords internal
 #' @export
 setClass("H2Result", contains = c("JDBCResult", "H2Object", "VIRTUAL"))
 
