@@ -6,11 +6,15 @@ Author: Christoph Hösler
 Maintainer: Christoph Hösler <christoph.hoesler@gmail.com>
 Description: DBI access to H2 databases.
 Depends:
-    methods,
-    DBI (>= 0.3.1)
+    R (>= 3.1.0),
+    methods
 Imports:
+    DBI (>= 0.3.1),
     dbj (>= 0.2),
     rJava (>= 0.4-15)
+Suggests:
+    testthat
+    DBItest
 SystemRequirements: java runtime
 License: MIT + file LICENSE
 URL: http://github.com/hoesler/dbj-h2
@@ -21,6 +25,4 @@ Collate:
     'H2Driver.R'
     'H2Result.R'
     'dbj.h2.R'
-Suggests:
-    testthat
 RoxygenNote: 5.0.1
