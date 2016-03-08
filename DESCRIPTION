@@ -13,7 +13,7 @@ Imports:
     dbj (>= 0.2),
     rJava (>= 0.4-15)
 Suggests:
-    testthat
+    testthat,
     DBItest
 SystemRequirements: java runtime
 License: MIT + file LICENSE
