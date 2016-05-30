@@ -11,7 +11,7 @@ setClass("H2Driver", contains = c("JDBCDriver", "H2Object"))
 #' @rdname H2Driver-class
 #' @export
 driver <- function(...) {
-  jdbc_driver <- JDBC('org.h2.Driver', ...)
+  jdbc_driver <- dbj::driver('org.h2.Driver', ...)
   new("H2Driver", jdbc_driver)
 }
 
@@ -23,7 +23,7 @@ H2 <- function(...) {
   driver(...)
 }
 
-#' Connect to a h2 database.
+#' Connect to an H2 database.
 #' 
 #' @param drv the database driver (\code{\link{H2}})
 #' @param url the url to connect to (Visit \url{http://h2database.com/html/features.html#database_url} for a reference).
@@ -35,7 +35,7 @@ H2 <- function(...) {
 setMethod("dbConnect", signature(drv = "H2Driver"),
 	function(drv, url = "mem:", user = 'sa', password = '', ...) {
     url <- sprintf("jdbc:h2:%s", sub("^(.*)\\.h2\\.db$", "\\1", url))
-    new("H2Connection", callNextMethod(drv = drv, url = url, user = user, password = password, ...))
+    new("H2Connection", dbj::dbConnect(drv = drv, url = url, user = user, password = password, ...))
   },
   valueClass = "H2Connection"
 )

@@ -6,5 +6,8 @@
 NULL
 
 .onLoad <- function(libname, pkgname) {
-  .jpackage(pkgname, lib.loc = libname)
+  success <- .jpackage(pkgname)
+  if (!success) {
+    stop(".jpackage did not succeed")
+  }
 }

@@ -16,7 +16,7 @@ setClass("H2Connection", contains = c("JDBCConnection", "H2Object"))
 #' @export
 setMethod("dbSendQuery", signature(conn = "H2Connection", statement = "character"),
   function(conn, statement, parameters = list(), ...) {
-    jdbc_result <- callNextMethod(conn = conn, statement = statement, parameters = parameters, ...)
+    jdbc_result <- dbj::dbSendQuery(conn = conn, statement = statement, parameters = parameters, ...)
     H2Result(jdbc_result)
   },
   valueClass = "H2Result"

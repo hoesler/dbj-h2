@@ -3,7 +3,7 @@
 \docType{methods}
 \name{dbConnect,H2Driver-method}
 \alias{dbConnect,H2Driver-method}
-\title{Connect to a h2 database.}
+\title{Connect to an H2 database.}
 \usage{
 \S4method{dbConnect}{H2Driver}(drv, url = "mem:", user = "sa",
   password = "", ...)
@@ -21,6 +21,6 @@ If the url is a path to a local file the '.h2.db' suffix is stripped off automat
 \item{...}{further arguments passed to \code{\linkS4class{JDBCConnection}}.}
 }
 \description{
-Connect to a h2 database.
+Connect to an H2 database.
 }
 
