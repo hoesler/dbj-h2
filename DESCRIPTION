@@ -1,5 +1,5 @@
 Package: dbj.h2
-Version: 0.1
+Version: 0.1.0.9000
 Encoding: UTF-8
 Title: DBI access to H2 databases
 Author: Christoph Hösler
