@@ -1,49 +1,45 @@
-DBItest::make_context(
-	# DBItest isn't quoting identifiers with dbQuoteIdentifier().
-	# So we have to use experimantal feature DATABASE_TO_UPPER=FALSE instead.
-	H2(), list(url = "mem:dbi-test;DATABASE_TO_UPPER=FALSE", user = 'sa')
+dbj_skips_global <- c(
+  "package_name",                         # Not an error: too restrictive
+  "constructor_strict", "constructor",    # Not an error: too restrictive
+  "stress_load.*",                        # Not an error: substitute in make_context does not substitute   
+  "stale_result_warning",                 # TODO: Currently I have no simple solution how to keep track of results
+  "data_time($|_.+)",                     # TODO: why should time be returned as character?
+  "data_timestamp_utc($|_.+)",            # TODO: If we store timestamp as SQL TIMESTAMP we have to discard timezone information.
+  "data_64_bit($|_.+)",                   # TODO: don't understand the rational behind this test
+  "data_type_connection",                 # TODO: What should be the data type for structure(.(value), class = "unknown1")?
+  "append_table_error",                   # TODO: append to non-existing table should only fail if create = FALSE
+  "overwrite_table",                      # TODO: similar to truncate?
+  "roundtrip_64_bit",                     # TODO: dbWriteTable does not support a field.types argument
+  "roundtrip_timestamp",                  # TODO: How can I differentiate between POSIXct and POSIXlt?
+  "read_only",                            # TODO: Create read only test context for this test
+
+  "data_logical_int",                     # not an error, full support for boolean data type
+  "data_logical_int_null_.*",             # not an error, full support for boolean data type
+  "roundtrip_logical_int",                # not an error, full support for boolean data type
+  
+  "quote_identifier_not_vectorized",      # not an error rstats-db/DBI#24
+
+  "column_info",                          # DBI tells me to return name, field.type, and data.type not "name" and "type"
+  "bind($|_.+)",                          # dbBind is not unsupported
+
+  NULL
 )
 
-DBItest::test_getting_started(skip = c(
-	"package_name", # too restrictive
-	"package_dependencies" # 'methods' must be listed in 'Depends' for R <= 3.1.1
-))
-DBItest::test_driver(skip = c(
-	"constructor_strict", "constructor", # too restrictive
-	"stress_load_unload" # substitute in make_context does not substitute (getOption("h2_jar") is passed on unevaluated)
-))
-DBItest::test_connection(skip = c(
-	"stress_load_connect_unload" # substitute in make_context does not substitute (getOption("h2_jar") is passed on unevaluated)
-))
-DBItest::test_result(skip = c(
-	"get_query_empty_single_column", "get_query_empty_multi_column", # default implementation of dbGetQuery in 0.3.1 returns NULL for empty results
-	"stale_result_warning", # Currently I have no simple soulution how to keep track of results
-	"data_logical_int($|_.+)", # I don't understand these tests. Why and when should logicals be ints?
-	"data_date($|_.+)", # date() is undefined in H2.
-	"data_time($|_.+)", # why should time be returned as character?
-	"data_timestamp_parens($|_.+)", # datetime is an unsupported function in H2
-	"data_timestamp_utc($|_.+)", # If we store timestamp as SQL TIMESTAMP we have to discard timezone information.
-	"data_raw($|_.+)", # SELECT cast(1 as BLOB) is invalid sytax in H2
-	"data_64_bit($|_.+)", # don't understand the rational behind the test
-	"data_type_connection" # What should be the data type for structure(.(value), class = "unknown1")?
-))
-DBItest::test_sql(skip = c(
-	"quote_string", "quote_identifier_not_vectorized", # tests default implementation in DBI 0.3.1.
-	"append_table_error", # append to nonexisting table should only fail if create = FALSE
-	"overwrite_table", # similar to truncate
-	"temporary_table", # this is a post 0.3.1 DBI feature
-	"roundtrip_logical_int", # logicals are currently mapped to BOOLEAN not INT
-	"roundtrip_64_bit", # dbWriteTable does not support a field.types argument
-	"roundtrip_rownames", # this is a post 0.3.1 DBI feature
-	"roundtrip_date", # TODO: storing dates as DATE seems unsafe as there might be conflicts with the timezone. H2 to Java Date is -1h. Seems like H2 is storing the date at local UTC+1 and Date is UTC
-	"roundtrip_timestamp" # TODO: How can I differentiate between POSIXct and POSIXlt?
-))
-DBItest::test_meta(skip = c(
-	"get_exception", # DBI 0.3.1 tells me to return a list not a character
-	"column_info", # DBI 0.3.1 tells me to return name, field.type, and data.type not "name" and "type"
-	"row_count", # TODO: fix. See comment in function
-	"bind($|_.+)" # dbBind is not defined in DBI 0.3.1
-))
-DBItest::test_compliance(skip = c(
-	"read_only" # Why should writing to the database fail?
+DBItest::make_context(
+	H2(),
+	# DATABASE_TO_UPPER=FALSE is required because of https://github.com/rstats-db/DBItest/issues/64
+	list(url = "mem:dbi-test;DATABASE_TO_UPPER=FALSE", user = 'sa'),
+	tweaks = DBItest::tweaks(constructor_name = "driver"),
+  name = "H2"
+)
+
+DBItest::test_all(skip = c(
+	# Driver independent
+	dbj_skips_global,
+
+	# H2 specific
+	"data_date($|_.+)",									# Not an error: date() function is undefined in H2.
+	"data_timestamp_parens($|_.+)", 		# Not an error: datetime() is an unsupported function in H2
+	"data_raw($|_.+)",									# Not an error: SELECT cast(1 as BLOB) is invalid sytax in H2	
+	NULL
 ))
