@@ -9,7 +9,7 @@ setClass("H2Result", contains = c("JDBCResult", "H2Object", "VIRTUAL"))
 
 #' @rdname H2Result-class
 #' @export
-setClass("H2QueryResult", contains = c("JDBCQueryResult", "H2Result"))
+setRefClass("H2QueryResult", contains = c("JDBCQueryResult", "H2Result"))
 
 #' @rdname H2Result-class
 #' @export
