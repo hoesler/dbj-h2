@@ -6,12 +6,12 @@ Author: Christoph Hösler
 Maintainer: Christoph Hösler <christoph.hoesler@gmail.com>
 Description: DBI access to H2 databases.
 Depends:
-    R (>= 3.1.0),
-    methods
+    R (>= 3.1.0)
 Imports:
-    DBI (>= 0.3.1),
-    dbj (>= 0.2),
-    rJava (>= 0.4-15)
+    methods,
+    DBI (>= 0.4),
+    dbj (>= 0.2.0.9000),
+    rJava (>= 0.9-8)
 Suggests:
     testthat,
     DBItest
