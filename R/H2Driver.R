@@ -1,5 +1,6 @@
 #' @include H2Object.R
 #' @importFrom dbj sql_dialect create_table_template
+#' @importFrom methods callNextMethod
 #' @importFrom utils packageName
 NULL
 
@@ -52,7 +53,8 @@ H2 <- function(...) {
 setMethod("dbConnect", signature(drv = "H2Driver"),
 	function(drv, url = "mem:", user = 'sa', password = '', ...) {
     url <- sprintf("jdbc:h2:%s", sub("^(.*)\\.h2\\.db$", "\\1", url))
-    new("H2Connection", dbj::dbConnect(drv = drv, url = url, user = user, password = password, ...))
+    jdbc_connection <- callNextMethod(drv, url = url, user = user, password = password, ...)
+    new("H2Connection", jdbc_connection)
   },
   valueClass = "H2Connection"
 )

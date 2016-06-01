@@ -2,6 +2,7 @@
 % Please edit documentation in R/H2Result.R
 \docType{class}
 \name{H2Result-class}
+\alias{H2QueryResult}
 \alias{H2QueryResult-class}
 \alias{H2Result-class}
 \alias{H2UpdateResult-class}
