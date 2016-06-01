@@ -2,6 +2,7 @@
 
 export(H2)
 export(driver)
+export(h2_dialect)
 exportClasses(H2Connection)
 exportClasses(H2Driver)
 exportClasses(H2Object)
@@ -14,3 +15,5 @@ import(DBI)
 import(dbj)
 import(methods)
 import(rJava)
+importFrom(dbj,create_table_template)
+importFrom(dbj,sql_dialect)

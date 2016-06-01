@@ -5,14 +5,18 @@
 \alias{H2}
 \alias{H2Driver-class}
 \alias{driver}
+\alias{h2_dialect}
 \title{Class H2Driver and factory method H2.}
+\format{An object of class \code{sql_dialect} of length 2.}
 \usage{
-driver(...)
+h2_dialect
+
+driver(sql_dialect = h2_dialect, classpath = NULL, ...)
 
 H2(...)
 }
 \arguments{
-\item{...}{arguments to \code{\link[dbj]{driver}}}
+\item{...}{Additional arguments to \code{\link[dbj]{driver}}.}
 
 \item{...}{arguments to \code{\link[dbj]{driver}}}
 }
@@ -21,5 +25,6 @@ Class H2Driver and factory method H2.
 
 Deprecated. Use dbj.h2::driver()
 }
+\keyword{datasets}
 \keyword{internal}
 

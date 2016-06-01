@@ -1,4 +1,6 @@
 #' @include H2Object.R
+#' @importFrom dbj sql_dialect create_table_template
+#' @importFrom utils packageName
 NULL
 
 #' Class H2Driver and factory method H2.
@@ -7,11 +9,26 @@ NULL
 #' @export
 setClass("H2Driver", contains = c("JDBCDriver", "H2Object"))
 
-#' @param ... arguments to \code{\link[dbj]{driver}}
+#' @rdname H2Driver-class
+#' @export 
+h2_dialect <- sql_dialect(name = 'H2', sql_create_table = create_table_template(
+  # LOCAL TEMPORARY makes it DBItest conform
+  function(table_name, field_names, field_types, temporary) {
+    paste0(
+      "CREATE ", if (temporary) "LOCAL TEMPORARY ", "TABLE ", table_name, " (\n",
+      "  ", paste(paste0(field_names, " ", field_types), collapse = ",\n  "), "\n)\n"
+    )
+  })
+)
+
+#' @param ... Additional arguments to \code{\link[dbj]{driver}}.
 #' @rdname H2Driver-class
 #' @export
-driver <- function(...) {
-  jdbc_driver <- dbj::driver('org.h2.Driver', ...)
+driver <- function(sql_dialect = h2_dialect, classpath = NULL, ...) {
+  if (is.null(classpath)) {
+    classpath = dir(system.file("java", package = packageName(), lib.loc = NULL), pattern = "*.jar", full.names = TRUE)
+  }
+  jdbc_driver <- dbj::driver('org.h2.Driver', classpath, dialect = sql_dialect, ...)
   new("H2Driver", jdbc_driver)
 }
 
