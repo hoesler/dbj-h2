@@ -2,4 +2,4 @@ language: r
 cache: packages
 
 r_github_packages:
-  - hoesler/dbj
+  - hoesler/dbj@development
