@@ -13,8 +13,4 @@ H2QueryResult <- setRefClass("H2QueryResult", contains = c("JDBCQueryResult", "H
 
 #' @rdname H2Result-class
 #' @export
-setClass("H2UpdateResult", contains = c("JDBCUpdateResult", "H2Result"))
-
-H2Result <- function(jdbc_result) UseMethod("H2Result")
-H2Result.JDBCQueryResult <- function(jdbc_result) H2QueryResult(jdbc_result)
-H2Result.JDBCUpdateResult <- function(jdbc_result) new("H2UpdateResult", jdbc_result)
+H2UpdateResult <- setClass("H2UpdateResult", contains = c("JDBCUpdateResult", "H2Result"))

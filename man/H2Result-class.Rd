@@ -5,6 +5,7 @@
 \alias{H2QueryResult}
 \alias{H2QueryResult-class}
 \alias{H2Result-class}
+\alias{H2UpdateResult}
 \alias{H2UpdateResult-class}
 \title{Class H2Result.}
 \description{

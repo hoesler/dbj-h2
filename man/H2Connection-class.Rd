@@ -2,6 +2,7 @@
 % Please edit documentation in R/H2Connection.R
 \docType{class}
 \name{H2Connection-class}
+\alias{H2Connection}
 \alias{H2Connection-class}
 \title{Class H2Connection}
 \description{

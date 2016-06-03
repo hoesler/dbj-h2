@@ -3,15 +3,19 @@
 \docType{class}
 \name{H2Driver-class}
 \alias{H2}
+\alias{H2Driver}
 \alias{H2Driver-class}
 \alias{driver}
 \alias{h2_dialect}
 \title{Class H2Driver and factory method H2.}
-\format{An object of class \code{sql_dialect} of length 2.}
+\format{An object of class \code{sql_dialect} of length 5.}
 \usage{
 h2_dialect
 
-driver(sql_dialect = h2_dialect, classpath = NULL, ...)
+driver(sql_dialect = h2_dialect, classpath = NULL,
+  read_conversions = default_read_conversions,
+  write_conversions = default_write_conversions,
+  create_new_connection = create_new_h2_connection, ...)
 
 H2(...)
 }
