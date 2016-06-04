@@ -11,7 +11,8 @@ Imports:
     methods,
     DBI (>= 0.4),
     dbj (>= 0.2.0.9000),
-    rJava (>= 0.9-8)
+    rJava (>= 0.9-8),
+    assertthat
 Suggests:
     testthat,
     DBItest
@@ -22,7 +23,7 @@ NeedsCompilation: no
 Collate:
     'H2Object.R'
     'H2Connection.R'
-    'H2Driver.R'
     'H2Result.R'
+    'H2Driver.R'
     'dbj.h2.R'
 RoxygenNote: 5.0.1

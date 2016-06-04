@@ -1,4 +1,5 @@
 #' @include H2Object.R
+#' @importFrom assertthat assert_that
 NULL
 
 #' Class H2Result.

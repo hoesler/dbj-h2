@@ -1,4 +1,6 @@
 #' @include H2Object.R
+#' @include H2Connection.R
+#' @include H2Result.R
 #' @importFrom dbj sql_dialect create_table_template create_jdbc_driver
 #' @importFrom methods callNextMethod
 #' @importFrom utils packageName
