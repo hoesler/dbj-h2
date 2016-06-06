@@ -8,7 +8,6 @@ It ships with the latest stable version of H2 (1.3.x).
 
 ## Installation
 ```R
-devtools::install_github("hoesler/dbj")
 devtools::install_github("hoesler/dbj.h2")
 ```
 
