@@ -79,7 +79,8 @@ H2 <- function(...) {
 #' @export
 setMethod("dbConnect", signature(drv = "H2Driver"),
 	function(drv, url = "mem:", user = 'sa', password = '', ...) {
-    url <- sprintf("jdbc:h2:%s", sub("^(.*)\\.h2\\.db$", "\\1", url))
+    url <- sprintf("jdbc:h2:%s", sub("^(?:jdbc:h2:)?(.*)", "\\1", url, perl = TRUE))
+    url <- sprintf("%s", sub("^(.+)\\.h2\\.db$", "\\1", url))
     callNextMethod(drv, url, user, password, ...)
   }
 )
