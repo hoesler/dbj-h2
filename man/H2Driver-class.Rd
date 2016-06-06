@@ -8,7 +8,7 @@
 \alias{driver}
 \alias{h2_dialect}
 \title{Class H2Driver and factory method H2.}
-\format{An object of class \code{sql_dialect} of length 5.}
+\format{An object of class \code{sql_dialect} of length 6.}
 \usage{
 h2_dialect
 
