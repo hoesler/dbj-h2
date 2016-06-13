@@ -33,7 +33,7 @@ jdbc_register_driver(
 )
 
 con <- dbConnect(dbj.h2::driver(), url = "mem:")
-dbGetQuery(con, paste0("select value from information_schema.settings where name = ", dbQuoteString(con, "info.VERSION")))$VALUE
+dbGetInfo(con)$jdbc_driver_version
 # [1] "1.4.192 (2016-05-26)"
 ```
 
