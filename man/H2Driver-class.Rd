@@ -8,7 +8,7 @@
 \alias{driver}
 \title{Class H2Driver and factory method H2.}
 \usage{
-driver(sql_dialect = h2_dialect, classpath = NULL,
+driver(sql_dialect = dbj::h2_dialect, classpath = NULL,
   read_conversions = default_read_conversions,
   write_conversions = default_write_conversions,
   create_new_connection = create_new_h2_connection, ...)
@@ -24,6 +24,10 @@ H2(...)
 Class H2Driver and factory method H2.
 
 Deprecated. Use dbj.h2::driver()
+}
+\examples{
+library(DBI)
+dbConnect(dbj.h2::driver(), 'mem:')
 }
 \keyword{internal}
 

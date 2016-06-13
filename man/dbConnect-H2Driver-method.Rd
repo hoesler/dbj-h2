@@ -6,17 +6,21 @@
 \title{Connect to an H2 database.}
 \usage{
 \S4method{dbConnect}{H2Driver}(drv, url = "mem:", user = "sa",
-  password = "", sql_dialect = h2_dialect, ...)
+  password = "", sql_dialect = dbj::h2_dialect, ...)
 }
 \arguments{
-\item{drv}{a \code{\linkS4class{JDBCConnection}} object}
+\item{drv}{An object of class \code{\linkS4class{JDBCDriver}}}
 
 \item{url}{the url to connect to (Visit \url{http://h2database.com/html/features.html#database_url} for a reference).
 If the url is a path to a local file the '.h2.db' suffix is stripped off automatically if present.}
 
-\item{password}{the password for the connection}
+\item{user}{the user to log in}
 
-\item{...}{Ignored. Included for compatibility with generic.}
+\item{password}{the user's password}
+
+\item{sql_dialect}{an \code{\link{sql_dialect}}}
+
+\item{...}{additional connection arguments}
 }
 \description{
 Connect to an H2 database.

@@ -52,7 +52,7 @@ H2 <- function(...) {
 #' 
 #' @param url the url to connect to (Visit \url{http://h2database.com/html/features.html#database_url} for a reference).
 #'   If the url is a path to a local file the '.h2.db' suffix is stripped off automatically if present.
-#' @inheritParams dbj::"dbConnect,JDBCConnection-method"
+#' @inheritParams dbj::"dbConnect,JDBCDriver-method"
 #' @export
 setMethod("dbConnect", signature(drv = "H2Driver"),
 	function(drv, url = "mem:", user = 'sa', password = '', sql_dialect = dbj::h2_dialect, ...) {
