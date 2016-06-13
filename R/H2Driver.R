@@ -25,7 +25,10 @@ create_new_h2_connection <- function(j_con, drv, sql_dialect) {
 #' @param ... Additional arguments to \code{\link[dbj]{driver}}.
 #' @rdname H2Driver-class
 #' @export
-driver <- function(sql_dialect = h2_dialect, classpath = NULL,
+#' @examples
+#' library(DBI)
+#' dbConnect(dbj.h2::driver(), 'mem:')
+driver <- function(sql_dialect = dbj::h2_dialect, classpath = NULL,
   read_conversions = default_read_conversions,
   write_conversions = default_write_conversions,
   create_new_connection = create_new_h2_connection, ...) {
@@ -52,7 +55,7 @@ H2 <- function(...) {
 #' @inheritParams dbj::"dbConnect,JDBCConnection-method"
 #' @export
 setMethod("dbConnect", signature(drv = "H2Driver"),
-	function(drv, url = "mem:", user = 'sa', password = '', sql_dialect = h2_dialect, ...) {
+	function(drv, url = "mem:", user = 'sa', password = '', sql_dialect = dbj::h2_dialect, ...) {
     url <- sprintf("jdbc:h2:%s", sub("^(?:jdbc:h2:)?(.*)", "\\1", url, perl = TRUE))
     url <- sprintf("%s", sub("^(.+)\\.h2\\.db$", "\\1", url))
     callNextMethod(drv, url, user, password, sql_dialect = sql_dialect, ...)
