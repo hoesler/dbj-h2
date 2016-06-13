@@ -5,9 +5,13 @@
 #' @name dbj.h2
 NULL
 
+H2_DRIVER_CLASS <- 'org.h2.Driver'
+
 .onLoad <- function(libname, pkgname) {
-  success <- .jpackage(pkgname)
-  if (!success) {
-    stop(".jpackage did not succeed")
+  .jinit()
+  driver_not_registered <- is.null(.jfindClass(H2_DRIVER_CLASS, silent = TRUE))
+  if (driver_not_registered) {
+    classpath = dir(system.file("java", package = packageName(), lib.loc = NULL), pattern = "*.jar", full.names = TRUE)
+    .jaddClassPath(classpath)
   }
 }

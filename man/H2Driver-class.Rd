@@ -6,12 +6,8 @@
 \alias{H2Driver}
 \alias{H2Driver-class}
 \alias{driver}
-\alias{h2_dialect}
 \title{Class H2Driver and factory method H2.}
-\format{An object of class \code{sql_dialect} of length 6.}
 \usage{
-h2_dialect
-
 driver(sql_dialect = h2_dialect, classpath = NULL,
   read_conversions = default_read_conversions,
   write_conversions = default_write_conversions,
@@ -29,6 +25,5 @@ Class H2Driver and factory method H2.
 
 Deprecated. Use dbj.h2::driver()
 }
-\keyword{datasets}
 \keyword{internal}
 
